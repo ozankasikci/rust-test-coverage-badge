@@ -51,11 +51,20 @@ fn test_rejects_coverage_over_100() {
 }
 
 #[test]
-fn test_rejects_missing_directory() {
-    let (_, stderr, code) = run_cli(&["--coverage", "50", "--output", "nonexistent/dir/badge.svg"]);
+fn test_creates_missing_directory() {
+    let output_path = "target/test-auto-create/nested/badge.svg";
 
-    assert_eq!(code, 1, "Should exit with code 1");
-    assert!(stderr.contains("directory does not exist"), "Should show directory error");
+    // Clean up first if exists
+    let _ = fs::remove_dir_all("target/test-auto-create");
+
+    let (stdout, _, code) = run_cli(&["--coverage", "50", "--output", output_path]);
+
+    assert_eq!(code, 0, "Should exit with code 0");
+    assert!(stdout.contains("Badge written to"), "Should print success message");
+    assert!(fs::metadata(output_path).is_ok(), "File should exist");
+
+    // Cleanup
+    fs::remove_dir_all("target/test-auto-create").ok();
 }
 
 #[test]

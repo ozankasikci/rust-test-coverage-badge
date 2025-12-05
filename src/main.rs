@@ -27,11 +27,13 @@ fn validate_coverage(coverage: f64) -> Result<(), String> {
     }
 }
 
-/// Validates that the output directory exists.
-fn validate_output_path(path: &Path) -> Result<(), String> {
+/// Ensures the output directory exists, creating it if necessary.
+fn ensure_output_dir(path: &Path) -> Result<(), String> {
     if let Some(parent) = path.parent() {
         if !parent.as_os_str().is_empty() && !parent.exists() {
-            return Err(format!("cannot write to '{}': directory does not exist", path.display()));
+            fs::create_dir_all(parent).map_err(|e| {
+                format!("cannot create directory '{}': {}", parent.display(), e)
+            })?;
         }
     }
     Ok(())
@@ -52,7 +54,7 @@ fn main() {
 
     let svg = coverage_badge::generate_badge(cli.coverage);
 
-    if let Err(e) = validate_output_path(&cli.output) {
+    if let Err(e) = ensure_output_dir(&cli.output) {
         eprintln!("error: {}", e);
         process::exit(1);
     }
@@ -95,23 +97,25 @@ mod tests {
     }
 
     #[test]
-    fn test_validate_output_path_exists() {
-        // Current directory should exist
+    fn test_ensure_output_dir_exists() {
+        // Current directory should exist, no-op
         let path = PathBuf::from("test.svg");
-        assert!(validate_output_path(&path).is_ok());
+        assert!(ensure_output_dir(&path).is_ok());
     }
 
     #[test]
-    fn test_validate_output_path_missing_dir() {
-        let path = PathBuf::from("nonexistent/dir/test.svg");
-        assert!(validate_output_path(&path).is_err());
-    }
+    fn test_ensure_output_dir_creates_missing() {
+        let path = PathBuf::from("target/test-ensure-dir/nested/badge.svg");
 
-    #[test]
-    fn test_validate_output_path_error_message() {
-        let path = PathBuf::from("missing/dir/badge.svg");
-        let err = validate_output_path(&path).unwrap_err();
-        assert!(err.contains("directory does not exist"));
+        // Clean up first if exists
+        let _ = std::fs::remove_dir_all("target/test-ensure-dir");
+
+        // Should create the directory
+        assert!(ensure_output_dir(&path).is_ok());
+        assert!(path.parent().unwrap().exists());
+
+        // Cleanup
+        std::fs::remove_dir_all("target/test-ensure-dir").ok();
     }
 
     #[test]
