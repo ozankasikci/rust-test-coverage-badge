@@ -47,4 +47,25 @@ mod tests {
         assert_eq!(coverage_color(90.0), "#4c1");
         assert_eq!(coverage_color(100.0), "#4c1");
     }
+
+    #[test]
+    fn test_coverage_level_low() {
+        assert_eq!(coverage_level(0.0), "low");
+        assert_eq!(coverage_level(25.0), "low");
+        assert_eq!(coverage_level(49.9), "low");
+    }
+
+    #[test]
+    fn test_coverage_level_medium() {
+        assert_eq!(coverage_level(50.0), "medium");
+        assert_eq!(coverage_level(65.0), "medium");
+        assert_eq!(coverage_level(79.9), "medium");
+    }
+
+    #[test]
+    fn test_coverage_level_high() {
+        assert_eq!(coverage_level(80.0), "high");
+        assert_eq!(coverage_level(90.0), "high");
+        assert_eq!(coverage_level(100.0), "high");
+    }
 }
