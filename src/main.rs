@@ -1,3 +1,4 @@
+mod badge;
 mod color;
 
 fn main() {
