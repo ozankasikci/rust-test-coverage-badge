@@ -12,6 +12,17 @@ pub fn coverage_color(percentage: f64) -> &'static str {
     }
 }
 
+/// Returns a description of the coverage level.
+pub fn coverage_level(percentage: f64) -> &'static str {
+    if percentage < 50.0 {
+        "low"
+    } else if percentage < 80.0 {
+        "medium"
+    } else {
+        "high"
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
