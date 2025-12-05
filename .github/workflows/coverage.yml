@@ -26,7 +26,7 @@ jobs:
       - name: Extract coverage percentage
         id: coverage
         run: |
-          COVERAGE=$(cat target/coverage/tarpaulin-report.json | jq '.coverage_percentage')
+          COVERAGE=$(cat target/coverage/tarpaulin-report.json | jq '.coverage')
           echo "percentage=$COVERAGE" >> $GITHUB_OUTPUT
           echo "Coverage: $COVERAGE%"
 
