@@ -78,7 +78,12 @@ runs:
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "${{ inputs.commit-message }}"
+          # Stash any other changes to avoid conflicts during rebase
+          git stash --include-untracked || true
           git pull --rebase
+          git stash pop || true
+          # Re-add in case stash pop modified things
+          git add "${{ inputs.output }}"
+          git commit -m "${{ inputs.commit-message }}"
           git push
         fi
