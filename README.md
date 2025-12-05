@@ -1,5 +1,7 @@
 # coverage-badge
 
+![Coverage](assets/coverage.svg)
+
 A Rust CLI tool that generates shields.io-style SVG badges for test coverage.
 
 ## Installation
