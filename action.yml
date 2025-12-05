@@ -13,6 +13,14 @@ inputs:
   output:
     description: 'Output path for the SVG file'
     required: true
+  commit:
+    description: 'Commit and push the badge (default: false)'
+    required: false
+    default: 'false'
+  commit-message:
+    description: 'Commit message (default: Update coverage badge)'
+    required: false
+    default: 'Update coverage badge'
 
 runs:
   using: 'composite'
@@ -59,3 +67,13 @@ runs:
       shell: bash
       run: |
         rm -f coverage-badge coverage-badge.tar.gz
+
+    - name: Commit and push badge
+      if: inputs.commit == 'true'
+      shell: bash
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add "${{ inputs.output }}"
+        git diff --staged --quiet || git commit -m "${{ inputs.commit-message }}"
+        git push

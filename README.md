@@ -23,9 +23,10 @@ Add this step to your workflow after running your coverage tool:
   with:
     coverage: ${{ steps.coverage.outputs.percentage }}
     output: assets/coverage.svg
+    commit: true
 ```
 
-Then reference the badge in your README:
+That's it! The action generates the badge and commits it to your repo. Then reference it in your README:
 
 ```markdown
 ![Coverage](assets/coverage.svg)
@@ -66,25 +67,20 @@ jobs:
         with:
           coverage: ${{ steps.coverage.outputs.percentage }}
           output: assets/coverage.svg
-
-      # Optional: commit the updated badge
-      - name: Commit badge
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/coverage.svg
-          git diff --staged --quiet || git commit -m "Update coverage badge"
-          git push
+          commit: true
+          commit-message: 'chore: update coverage badge'
 ```
 
 </details>
 
 ## Action Inputs
 
-| Input | Required | Description |
-|-------|----------|-------------|
-| `coverage` | Yes | Coverage percentage (0-100, decimals allowed) |
-| `output` | Yes | Output path for the SVG file |
+| Input | Required | Default | Description |
+|-------|----------|---------|-------------|
+| `coverage` | Yes | - | Coverage percentage (0-100, decimals allowed) |
+| `output` | Yes | - | Output path for the SVG file |
+| `commit` | No | `false` | Commit and push the badge |
+| `commit-message` | No | `Update coverage badge` | Custom commit message |
 
 ## CLI Usage
 
