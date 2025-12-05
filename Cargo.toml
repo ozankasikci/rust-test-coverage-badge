@@ -1,6 +1,6 @@
 [package]
 name = "coverage-badge"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Ozan Kaşıkçı <ozan@kasikci.io>"]
 description = "Generate shields.io-style SVG badges for test coverage percentages"

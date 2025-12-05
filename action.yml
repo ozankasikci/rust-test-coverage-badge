@@ -48,7 +48,7 @@ runs:
     - name: Download and extract binary
       shell: bash
       run: |
-        VERSION="0.1.0"
+        VERSION="0.1.1"
         TARGET="${{ steps.platform.outputs.target }}"
         URL="https://github.com/ozankasikci/rust-test-coverage-badge/releases/download/v${VERSION}/coverage-badge-${TARGET}.tar.gz"
 
