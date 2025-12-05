@@ -1,4 +1,4 @@
-name: 'Test Coverage Badge'
+name: 'Rust Coverage Badge'
 description: 'Generate a shields.io-style SVG coverage badge'
 author: 'Ozan Kaşıkçı'
 
