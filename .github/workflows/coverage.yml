@@ -30,11 +30,11 @@ jobs:
           echo "percentage=$COVERAGE" >> $GITHUB_OUTPUT
           echo "Coverage: $COVERAGE%"
 
-      - name: Build coverage-badge
-        run: cargo build --release
-
       - name: Generate badge
-        run: ./target/release/coverage-badge -c ${{ steps.coverage.outputs.percentage }} -o assets/coverage.svg
+        uses: ozankasikci/rust-test-coverage-badge@v1
+        with:
+          coverage: ${{ steps.coverage.outputs.percentage }}
+          output: assets/coverage.svg
 
       - name: Commit badge
         run: |
